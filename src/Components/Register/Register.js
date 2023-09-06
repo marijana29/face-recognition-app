@@ -21,7 +21,7 @@ onPasswordChange = (event) => {
 		this.setState({password: event.target.value})
 	}
 onSubmitSignIn = () => {
-	fetch('http://localhost:5000/register', {
+	fetch('https://mybackend-qk20.onrender.com/register', {
 		method: 'post',
 		headers: {'Content-Type': 'application/json'},
 		body: JSON.stringify({
