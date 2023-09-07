@@ -77,12 +77,12 @@ class App extends Component {
   onButtonSubmit = () => {
   this.setState({ imageUrl: this.state.input });
   fetch('https://mybackend-qk20.onrender.com/imageurl', {
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      imageUrl: this.state.input
-    })
+  method: 'post',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    input: this.state.input
   })
+})
     .then(response => response.json())
     .then(response => {
       if (response) {
