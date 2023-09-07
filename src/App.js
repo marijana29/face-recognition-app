@@ -9,7 +9,7 @@ import ImageLinkForm from './Components/ImageLinkForm/ImageLinkForm';
 import Rank from './Components/Rank/Rank';
 import './App.css';
 
-const fetch = require('node-fetch');
+
 
 
 
