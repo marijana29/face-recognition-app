@@ -74,36 +74,36 @@ class App extends Component {
     this.setState({ input: event.target.value });
   }
 
-   onButtonSubmit = () => {
-    this.setState({imageUrl: this.state.input});
-   fetch('https://mybackend-qk20.onrender.com/imageurl', {
-            method: 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              input: this.state.input
-            })
-          })
-   .then(response => response.json())
+  onButtonSubmit = () => {
+  this.setState({ imageUrl: this.state.input });
+  fetch('https://mybackend-qk20.onrender.com/imageurl', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      input: this.state.input
+    })
+  })
+    .then(response => response.json())
     .then(response => {
-        console.log('hi', response)
-        if (response) {
-          fetch('https://mybackend-qk20.onrender.com/image', {
-            method: 'put',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              id: this.state.user.id
-            })
+      if (response) {
+        fetch('https://mybackend-qk20.onrender.com/image', {
+          method: 'put',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: this.state.user.id
           })
-            .then(response => response.json())
-            .then(count => {
-              this.setState(Object.assign(this.state.user, { entries: count}))
-            })
+        })
+          .then(response => response.json())
+          .then(count => {
+            this.setState(Object.assign(this.state.user, { entries: count }));
+            this.displayFaceBox(this.calculateFaceLocation(response));
+          })
+          .catch(err => console.log(err));
+      }
+    })
+    .catch(err => console.log(err));
+}
 
-        }
-        this.displayFaceBox(this.calculateFaceLocation(response))
-      })
-      .catch(err => console.log(err));
-  }
 
 
 
