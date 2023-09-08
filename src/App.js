@@ -78,13 +78,33 @@ class App extends Component {
 
   onButtonSubmit = () => {
   this.setState({ imageUrl: this.state.input });
-  fetch('https://mybackend-qk20.onrender.com/imageurl', {
-  method: 'post',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    input: this.state.input
+
+ 
+  const userId = 'marijana29';
+  const appId = 'facerecognitionbrain';
+
+  // Construct the URL with the user and app IDs
+  const imageUrl = this.state.input;
+  const apiUrl = `https://api.clarifai.com/v2/models/face-detection/predict?user_id=${userId}&app_id=${appId}`;
+
+  fetch(apiUrl, {
+    method: 'post',
+    headers: {
+      'Authorization': 'Key 6399446788964a84813fa6a92d82ca0d', 
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      inputs: [
+        {
+          data: {
+            image: {
+              url: imageUrl
+            }
+          }
+        }
+      ]
+    })
   })
-})
     .then(response => response.json())
     .then(response => {
       if (response) {
@@ -97,15 +117,14 @@ class App extends Component {
         })
           .then(response => response.json())
           .then(count => {
-           this.setState(Object.assign(this.state.user, { entries: count}))
-            })
-            .catch(console.log)
-
+            this.setState(Object.assign(this.state.user, { entries: count }));
+          })
+          .catch(console.log);
         }
-        this.displayFaceBox(this.calculateFaceLocation(response))
+        this.displayFaceBox(this.calculateFaceLocation(response.outputs[0].data));
       })
       .catch(err => console.log(err));
-  }
+}
 
 
 
