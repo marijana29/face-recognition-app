@@ -84,7 +84,7 @@ class App extends Component {
 
   // Construct the URL with the user and app IDs
   const imageUrl = this.state.input;
-  const apiUrl = `https://api.clarifai.com/v2/models/face-detection/predict?user_id=${userId}&app_id=${appId}`;
+  const apiUrl = `https://api.clarifai.com/v2/models/face-detection/versions/6dc7e46bc9124c5c8824be4822abe105/outputs`;
 
   fetch(apiUrl, {
     method: 'post',
