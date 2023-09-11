@@ -135,14 +135,14 @@ onButtonSubmit = () => {
 
 
 
-  onRouteChange = (route) => {
-    if (route === 'signout') {
-      this.setState({ isSignedIn: false });
-    } else if (route === 'home') {
-      this.setState({ isSignedIn: true });
-    }
-    this.setState({ route: route });
+ onRouteChange = (route) => {
+  if (route === 'signout') {
+    this.setState({ isSignedIn: false, imageUrl: '' }); // Reset imageUrl when signing out
+  } else if (route === 'home') {
+    this.setState({ isSignedIn: true, imageUrl: '' }); // Reset imageUrl when navigating to home
   }
+  this.setState({ route: route });
+}
 
   render() {
     const { isSignedIn, imageUrl, route, box} = this.state;
