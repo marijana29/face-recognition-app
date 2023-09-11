@@ -101,9 +101,11 @@ onButtonSubmit = () => {
 
           // Display the face box
           this.displayFaceBox(faceLocation);
+        } else {
+          console.log('No regions found in the data');
         }
       } else {
-        console.log('No face detected'); // Handle case when no face is detected
+        console.log('No outputs found in the data');
       }
     })
     .catch(error => {
@@ -111,7 +113,6 @@ onButtonSubmit = () => {
       // Handle error
     });
 }
-
 
 
 
