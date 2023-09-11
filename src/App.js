@@ -11,11 +11,8 @@ import './App.css';
 
 
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      input: '',
+const initialState = {
+  input: '',
   imageUrl: '',
   box: {},
   route: 'signin',
@@ -26,7 +23,14 @@ class App extends Component {
     email: '',
     entries: 0,
     joined: ''
-  }}}
+  }
+}
+
+class App extends Component {
+  constructor() {
+    super();
+    this.state = initialState;
+  }
 
  loadUser = (data) => {
   this.setState((prevState) => ({
@@ -35,28 +39,12 @@ class App extends Component {
       id: data.id,
       name: data.name,
       email: data.email,
+       entries: data.entries,
       joined: data.joined,
-    },
+    }
   }));
 
-  // Retrieve the user's entry count from the database
-  db('users')
-    .select('entries')
-    .where('id', '=', data.id)
-    .then((entries) => {
-      const entryCount = entries[0].entries || 0; // Default to 0 if not found
-      this.setState((prevState) => ({
-        user: {
-          ...prevState.user,
-          entries: entryCount,
-        },
-      }));
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-}
-
+  
 
   calculateFaceLocation = (data) => {
     const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
@@ -153,15 +141,15 @@ onButtonSubmit = () => {
 
 
 
- onRouteChange = (route) => {
-  if (route === 'signout') {
-    this.setState({ isSignedIn: false, imageUrl: '' }); // Reset imageUrl when signing out
-  } else if (route === 'home') {
-    this.setState({ isSignedIn: true, imageUrl: '' }); // Reset imageUrl when navigating to home
+  onRouteChange = (route) => {
+    if (route === 'signout') {
+      this.setState(initialState)
+    } else if (route === 'home') {
+      this.setState({isSignedIn: true})
+    }
+    this.setState({route: route});
   }
-  this.setState({ route: route });
-}
-
+   
   render() {
     const { isSignedIn, imageUrl, route, box} = this.state;
     return (
