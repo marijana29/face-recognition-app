@@ -69,35 +69,48 @@ class App extends Component {
   }
 
  onButtonSubmit = () => {
-    this.setState({imageUrl: this.state.input});
-      fetch('https://mybackend-qk20.onrender.com/imageurl', {
-        method: 'post',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          input: this.state.input
-        })
-      })
-      .then(response => response.json())
-      .then(response => {
-        if (response) {
-          fetch('https://mybackend-qk20.onrender.com/image', {
-            method: 'put',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              id: this.state.user.id
-            })
-          })
-            .then(response => response.json())
-            .then(count => {
-              this.setState(Object.assign(this.state.user, { entries: count}))
-            })
-            .catch(console.log)
+  this.setState({ imageUrl: this.state.input });
 
-        }
-        this.displayFaceBox(this.calculateFaceLocation(response))
-      })
-      .catch(err => console.log(err));
-  }
+  fetch('https://mybackend-qk20.onrender.com/imageurl', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      input: this.state.input,
+    }),
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Failed to fetch');
+      }
+    })
+    .then((response) => {
+      if (response) {
+        fetch('https://mybackend-qk20.onrender.com/image', {
+          method: 'put',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: this.state.user.id,
+          }),
+        })
+          .then((response) => response.json())
+          .then((count) => {
+            this.setState(Object.assign(this.state.user, { entries: count }));
+          })
+          .catch(console.log);
+
+        this.displayFaceBox(this.calculateFaceLocation(response));
+      } else {
+        // Handle cases where the response does not contain expected data
+        console.log('Invalid response from server');
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 
   onRouteChange = (route) => {
     if (route === 'signout') {
