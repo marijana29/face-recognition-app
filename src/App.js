@@ -117,7 +117,7 @@ onButtonSubmit = () => {
           this.setState(prevState => ({
             user: {
               ...prevState.user,
-              entries: prevState.user.entries + 1 // Increment entries by 1
+            entries: parseInt(prevState.user.entries, 10) + 1 
             }
           }));
         } else {
