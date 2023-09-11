@@ -35,7 +35,8 @@ class App extends Component {
       id: data.id,
       name: data.name,
       email: data.email,
-      joined: data.joined
+      joined: data.joined,
+      entries: data.entries
     }
   }));
 }
