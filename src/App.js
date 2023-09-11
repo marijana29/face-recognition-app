@@ -64,7 +64,6 @@ class App extends Component {
 onButtonSubmit = () => {
   this.setState({ imageUrl: this.state.input });
 
-
   const raw = JSON.stringify({
     "user_app_id": {
       "user_id": "marijana29",
@@ -74,7 +73,7 @@ onButtonSubmit = () => {
       {
         "data": {
           "image": {
-            "url": this.state.input 
+            "url": this.state.input
           }
         }
       }
@@ -92,15 +91,27 @@ onButtonSubmit = () => {
 
   fetch("https://api.clarifai.com/v2/models/face-detection/versions/6dc7e46bc9124c5c8824be4822abe105/outputs", requestOptions)
     .then(response => response.json())
-    .then(result => {
-      console.log(result); // Handle the result from Clarifai as needed
-      // Rest of your code for updating user entries and displaying face boxes
+    .then(data => {
+      // Check if data.outputs is defined and contains results
+      if (data.outputs && data.outputs.length > 0) {
+        const faceData = data.outputs[0].data;
+        if (faceData.regions && faceData.regions.length > 0) {
+          // Extract face location information
+          const faceLocation = this.calculateFaceLocation(faceData);
+
+          // Display the face box
+          this.displayFaceBox(faceLocation);
+        }
+      } else {
+        console.log('No face detected'); // Handle case when no face is detected
+      }
     })
     .catch(error => {
       console.log('error', error);
       // Handle error
     });
 }
+
 
 
 
