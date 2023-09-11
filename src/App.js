@@ -11,10 +11,11 @@ import './App.css';
 
 
 
-
-
-const initialState = {
-  input: '',
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      input: '',
   imageUrl: '',
   box: {},
   route: 'signin',
@@ -25,15 +26,7 @@ const initialState = {
     email: '',
     entries: 0,
     joined: ''
-  }
-}
-
-
-class App extends Component {
-  constructor() {
-    super();
-    this.state = initialState;
-  }
+  }}}
 
   loadUser = (data) => {
     this.setState({
@@ -68,57 +61,46 @@ class App extends Component {
     this.setState({ input: event.target.value });
   }
 
- onButtonSubmit = () => {
+  onButtonSubmit = () => {
   this.setState({ imageUrl: this.state.input });
-
   fetch('https://mybackend-qk20.onrender.com/imageurl', {
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      input: this.state.input,
-    }),
+  method: 'post',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    input: this.state.input
   })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Failed to fetch');
-      }
-    })
-    .then((response) => {
+})
+    .then(response => response.json())
+    .then(response => {
       if (response) {
         fetch('https://mybackend-qk20.onrender.com/image', {
           method: 'put',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            id: this.state.user.id,
-          }),
-        })
-          .then((response) => response.json())
-          .then((count) => {
-            this.setState(Object.assign(this.state.user, { entries: count }));
+            id: this.state.user.id
           })
-          .catch(console.log);
-
-        this.displayFaceBox(this.calculateFaceLocation(response));
-      } else {
-        // Handle cases where the response does not contain expected data
-        console.log('Invalid response from server');
+        })
+          .then(response => response.json())
+          .then(count => {
+            this.setState(Object.assign(this.state.user, { entries: count }));
+            this.displayFaceBox(this.calculateFaceLocation(response));
+          })
+          .catch(err => console.log(err));
       }
     })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+    .catch(err => console.log(err));
+}
+
+
 
 
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState(initialState)
+      this.setState({ isSignedIn: false });
     } else if (route === 'home') {
-      this.setState({isSignedIn: true})
+      this.setState({ isSignedIn: true });
     }
-    this.setState({route: route});
+    this.setState({ route: route });
   }
 
   render() {
