@@ -82,7 +82,7 @@ class App extends Component {
   const userId = 'marijana29';
   const appId = 'facerecognitionbrain';
 
-  
+  // Construct the URL with the user and app IDs
   const imageUrl = this.state.input;
   const apiUrl = `https://api.clarifai.com/v2/models/face-detection/predict?user_id=${userId}&app_id=${appId}`;
 
@@ -107,7 +107,7 @@ class App extends Component {
     .then(response => response.json())
     .then(response => {
       if (response) {
-        fetch('https://mybackend-qk20.onrender.com/image', { // Update this URL
+        fetch('https://mybackend-qk20.onrender.com/image', {
           method: 'put',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -123,7 +123,7 @@ class App extends Component {
       this.displayFaceBox(this.calculateFaceLocation(response.outputs[0].data));
     })
     .catch(err => console.log(err));
-
+}
 
 
 
