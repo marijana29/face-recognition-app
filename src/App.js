@@ -107,22 +107,14 @@ class App extends Component {
 
             // Extract face location information
             const faceLocation = {
-              leftCol: faceData.left_col * width,
-              topRow: faceData.top_row * height,
-              rightCol: width - faceData.right_col * width,
-              bottomRow: height - faceData.bottom_row * height
+              leftCol: clarifaiFace.left_col * width,
+              topRow: clarifaiFace.top_row * height,
+              rightCol: width - clarifaiFace.right_col * width,
+              bottomRow: height - clarifaiFace.bottom_row * height
             };
 
             // Display the face box
             this.displayFaceBox(faceLocation);
-
-            // Update the user's entry count
-            this.setState(prevState => ({
-              user: {
-                ...prevState.user,
-                entries: parseInt(prevState.user.entries, 10) + 1 
-              }
-            }));
           } else {
             console.log('No face detected');
           }
@@ -154,7 +146,6 @@ class App extends Component {
         {route === 'home' 
           ? <div>
               <Logo />
-              <Rank name={this.state.user.name} entries={this.state.user.entries} />
               <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} />
               <FaceRecognition box={box} imageUrl={imageUrl} />
             </div>
