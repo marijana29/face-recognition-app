@@ -13,24 +13,8 @@ import './App.css';
 
 
 
-// const particlesOptions = { 
-//   particles: {
-//     line_linked: {
-//       shadow: {
-//         enable: true,
-//         color: '#3ca9d1',
-//         blur: 5
-//       }
-//     }
-//   }
-// };
-
-
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      input: '',
+const initialState = {
+  input: '',
   imageUrl: '',
   box: {},
   route: 'signin',
@@ -41,7 +25,15 @@ class App extends Component {
     email: '',
     entries: 0,
     joined: ''
-  }}}
+  }
+}
+
+
+class App extends Component {
+  constructor() {
+    super();
+    this.state = initialState;
+  }
 
   loadUser = (data) => {
     this.setState({
