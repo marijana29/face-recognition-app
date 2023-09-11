@@ -112,6 +112,14 @@ onButtonSubmit = () => {
 
           // Display the face box
           this.displayFaceBox(faceLocation);
+
+          // Update the user's entry count
+          this.setState(prevState => ({
+            user: {
+              ...prevState.user,
+              entries: prevState.user.entries + 1 // Increment entries by 1
+            }
+          }));
         } else {
           console.log('No face detected');
         }
