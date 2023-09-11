@@ -8,7 +8,7 @@ import Logo from './Components/Logo/Logo';
 import ImageLinkForm from './Components/ImageLinkForm/ImageLinkForm';
 import Rank from './Components/Rank/Rank';
 import './App.css';
-
+import fetch from 'node-fetch';
 
 
 
