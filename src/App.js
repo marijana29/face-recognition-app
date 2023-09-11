@@ -92,20 +92,31 @@ onButtonSubmit = () => {
   fetch("https://api.clarifai.com/v2/models/face-detection/versions/6dc7e46bc9124c5c8824be4822abe105/outputs", requestOptions)
     .then(response => response.json())
     .then(data => {
-      // Check if data.outputs is defined and contains results
-      if (data.outputs && data.outputs.length > 0) {
-        const faceData = data.outputs[0].data;
-        if (faceData.regions && faceData.regions.length > 0) {
+      try {
+        // Attempt to access face location information
+        const faceData = data.outputs[0].data.regions[0].region_info.bounding_box;
+
+        // Check if faceData is defined
+        if (faceData) {
+          const image = document.getElementById('inputimage');
+          const width = Number(image.width);
+          const height = Number(image.height);
+
           // Extract face location information
-          const faceLocation = this.calculateFaceLocation(faceData);
+          const faceLocation = {
+            leftCol: faceData.left_col * width,
+            topRow: faceData.top_row * height,
+            rightCol: width - (faceData.right_col * width),
+            bottomRow: height - (faceData.bottom_row * height)
+          };
 
           // Display the face box
           this.displayFaceBox(faceLocation);
         } else {
-          console.log('No regions found in the data');
+          console.log('No face detected');
         }
-      } else {
-        console.log('No outputs found in the data');
+      } catch (error) {
+        console.log('Error processing response:', error);
       }
     })
     .catch(error => {
