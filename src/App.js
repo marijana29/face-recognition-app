@@ -124,11 +124,11 @@ class App extends Component {
       })
       .catch(error => {
         console.log('error', error);
-        // Handle error
+       
       });
   }
 
-            Update the user's entry count
+           
             this.setState(prevState => ({
              user: {
                ...prevState.user,
@@ -144,7 +144,7 @@ class App extends Component {
       })
       .catch(error => {
         console.log('error', error);
-        // Handle error
+      
       });
   }
 
