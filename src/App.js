@@ -64,89 +64,76 @@ class App extends Component {
     this.setState({ input: event.target.value });
   }
 
-  onButtonSubmit = () => {
-    this.setState({ imageUrl: this.state.input });
+onButtonSubmit = () => {
+  this.setState({ imageUrl: this.state.input });
 
-    const raw = JSON.stringify({
-      "user_app_id": {
-        "user_id": "marijana29",
-        "app_id": "facerecognitionbrain"
-      },
-      "inputs": [
-        {
-          "data": {
-            "image": {
-              "url": this.state.input
+  const raw = JSON.stringify({
+    "user_app_id": {
+      "user_id": "marijana29",
+      "app_id": "facerecognitionbrain"
+    },
+    "inputs": [
+      {
+        "data": {
+          "image": {
+            "url": this.state.input
+          }
+        }
+      }
+    ]
+  });
+
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': 'Key 6399446788964a84813fa6a92d82ca0d'
+    },
+    body: raw
+  };
+
+  fetch("https://api.clarifai.com/v2/models/face-detection/versions/6dc7e46bc9124c5c8824be4822abe105/outputs", requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      try {
+        // Attempt to access face location information
+        const faceData = data.outputs[0].data.regions[0].region_info.bounding_box;
+
+        // Check if faceData is defined
+        if (faceData) {
+          const image = document.getElementById('inputimage');
+          const width = Number(image.width);
+          const height = Number(image.height);
+
+          // Extract face location information
+          const faceLocation = {
+            leftCol: faceData.left_col * width,
+            topRow: faceData.top_row * height,
+            rightCol: width - faceData.right_col * width,
+            bottomRow: height - faceData.bottom_row * height
+          };
+
+          // Display the face box
+          this.displayFaceBox(faceLocation);
+
+          // Update the user's entry count
+          this.setState(prevState => ({
+            user: {
+              ...prevState.user,
+              entries: parseInt(prevState.user.entries, 10) + 1 
             }
-          }
+          }));
+        } else {
+          console.log('No face detected');
         }
-      ]
+      } catch (error) {
+        console.log('Error processing response:', error);
+      }
+    })
+    .catch(error => {
+      console.log('error', error);
     });
-
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Key 6399446788964a84813fa6a92d82ca0d'
-      },
-      body: raw
-    };
-
-    fetch("https://api.clarifai.com/v2/models/face-detection/versions/6dc7e46bc9124c5c8824be4822abe105/outputs", requestOptions)
-      .then(response => response.json())
-      .then(data => {
-        try {
-          // Attempt to access face location information
-          const faceData = data.outputs[0].data.regions[0].region_info.bounding_box;
-
-          // Check if faceData is defined
-          if (faceData) {
-            const image = document.getElementById('inputimage');
-            const width = Number(image.width);
-            const height = Number(image.height);
-
-            // Extract face location information
-            const faceLocation = {
-              leftCol: faceData.left_col * width,
-              topRow: faceData.top_row * height,
-              rightCol: width - faceData.right_col * width,
-              bottomRow: height - faceData.bottom_row * height
-            };
-
-            // Display the face box
-            this.displayFaceBox(faceLocation);
-             } else {
-            console.log('No face detected');
-          }
-        } catch (error) {
-          console.log('Error processing response:', error);
-        }
-      })
-      .catch(error => {
-        console.log('error', error);
-       
-      });
-  }
-
-           
-            this.setState(prevState => ({
-             user: {
-               ...prevState.user,
-                entries: parseInt(prevState.user.entries, 10) + 1 
-             }
-            }));
-          } else {
-            console.log('No face detected');
-          }
-        } catch (error) {
-          console.log('Error processing response:', error);
-        }
-      })
-      .catch(error => {
-        console.log('error', error);
-      
-      });
-  }
+}
 
   onRouteChange = (route) => {
     if (route === 'signout') {
