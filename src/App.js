@@ -128,25 +128,25 @@ class App extends Component {
       });
   }
 
-            // Update the user's entry count
-            //this.setState(prevState => ({
-             // user: {
-               // ...prevState.user,
-                //entries: parseInt(prevState.user.entries, 10) + 1 
-            //  }
-  //           }));
-  //         } else {
-  //           console.log('No face detected');
-  //         }
-  //       } catch (error) {
-  //         console.log('Error processing response:', error);
-  //       }
-  //     })
-  //     .catch(error => {
-  //       console.log('error', error);
-  //       // Handle error
-  //     });
-  // }
+            Update the user's entry count
+            this.setState(prevState => ({
+             user: {
+               ...prevState.user,
+                entries: parseInt(prevState.user.entries, 10) + 1 
+             }
+            }));
+          } else {
+            console.log('No face detected');
+          }
+        } catch (error) {
+          console.log('Error processing response:', error);
+        }
+      })
+      .catch(error => {
+        console.log('error', error);
+        // Handle error
+      });
+  }
 
   onRouteChange = (route) => {
     if (route === 'signout') {
